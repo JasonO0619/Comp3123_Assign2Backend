@@ -4,16 +4,16 @@ import {
     createEmployee,
     getEmployeeById,
     updateEmployee,
-    deleteEmployee
+    deleteEmployee,
+    searchEmployee
 } from '../controllers/employeeController.js'; 
 
 const router = express.Router();
 
-
-router.get('/employees', getAllEmployees); 
-router.post('/employees', createEmployee); 
-router.get('/employees/:eid', getEmployeeById); 
-router.put('/employees/:eid', updateEmployee); 
-router.delete('/employees/:eid', deleteEmployee); 
-
+router.get('/search', searchEmployee);
+router.get('/', getAllEmployees); 
+router.post('/', createEmployee); 
+router.get('/:eid', getEmployeeById); 
+router.put('/:eid', updateEmployee); 
+router.delete('/:eid', deleteEmployee); 
 export default router;

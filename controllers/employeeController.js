@@ -3,7 +3,18 @@ import Employee from '../models/Employee.js';
 
 export const getAllEmployees = async (req, res) => {
     try {
-        const employees = await Employee.find();
+        const { position, department } = req.query; 
+       
+        const filter = {};
+        if (position) {
+            filter.position = position; 
+        }
+        if (department) {
+            filter.department = department; 
+        }
+
+       
+        const employees = await Employee.find(filter);
         res.status(200).json(employees);
     } catch (error) {
         res.status(500).json({ status: false, message: error.message });
@@ -78,12 +89,29 @@ export const updateEmployee = [
 
 export const deleteEmployee = async (req, res) => {
     try {
-        const { eid } = req.query;
+        const { eid } = req.params;
         const employee = await Employee.findByIdAndDelete(eid);
         if (!employee) {
             return res.status(404).json({ status: false, message: 'Employee not found' });
         }
         res.status(200).json({ message: 'Employee deleted successfully.' });
+    } catch (error) {
+        res.status(500).json({ status: false, message: error.message });
+    }
+};
+
+export const searchEmployee = async (req, res) => {
+    try {
+        const { position, department } = req.query; 
+        const filters = {};
+
+      
+        if (position) filters.position = new RegExp(`^${position}$`, 'i'); 
+        if (department) filters.department = new RegExp(`^${department}$`, 'i'); 
+
+
+        const employees = await Employee.find(filters);
+        res.status(200).json(employees);
     } catch (error) {
         res.status(500).json({ status: false, message: error.message });
     }
